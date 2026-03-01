@@ -22,6 +22,7 @@ import 'package:alist/screen/file_list/file_rename_dialog.dart';
 import 'package:alist/screen/file_list/mkdir_dialog.dart';
 import 'package:alist/screen/file_reader_screen.dart';
 import 'package:alist/screen/gallery_screen.dart';
+import 'package:alist/screen/markdown_reader_screen.dart';
 import 'package:alist/screen/pdf_reader_screen.dart';
 import 'package:alist/screen/video_player_screen.dart';
 import 'package:alist/util/alist_plugin.dart';
@@ -1030,13 +1031,15 @@ class _FileListScreenState extends State<FileListScreen>
   }
 
   void _previewMarkdown(FileItemVO file) async {
-    var fileLink = await FileUtils.makeFileLink(file.path, file.sign);
-    if (fileLink != null) {
-      Get.toNamed(NamedRouter.web, arguments: {
-        "url": MarkdownUtil.makePreviewUrl(fileLink),
-        "title": file.name
-      });
-    }
+    // Use local markdown reader instead of webview
+    Get.toNamed(NamedRouter.markdownReader, arguments: {
+      "markdownReaderItem": MarkdownReaderItem(
+        file.path,
+        file.sign,
+        file.name,
+        FileType.markdown,
+      ),
+    });
   }
 
   void _showDownloadTipDialog() {

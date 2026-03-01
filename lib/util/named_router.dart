@@ -55,4 +55,7 @@ class NamedRouter {
 
   // player settings
   static const playerSettings = "/playerSettings";
+
+  // markdown reader
+  static const markdownReader = "/markdownReader";
 }

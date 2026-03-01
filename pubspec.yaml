@@ -97,6 +97,15 @@ dependencies:
   uuid: ^3.0.7
   pull_to_refresh: ^2.0.0
   flutter_staggered_grid_view: 0.7.0
+  # Markdown support
+  flutter_markdown: ^0.6.15
+  # File upload enhancement
+  file_picker: ^5.3.3
+  # File management
+  path: ^1.8.3
+  # Video/Audio enhancement
+  chewie: ^1.5.0
+  video_player: ^2.8.3
 
 dependency_overrides:
   win32: 5.0.0
