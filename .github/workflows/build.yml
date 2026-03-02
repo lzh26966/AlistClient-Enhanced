@@ -11,43 +11,41 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     
-    - name: Setup JDK
-      uses: actions/setup-java@v3
+    - name: Setup Java
+      uses: actions/setup-java@v4
       with:
-        java-version: '11'
+        java-version: '17'
         distribution: 'temurin'
     
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
-      
     - name: Setup Flutter
-      uses: subosito/flutter-action@v2
+      uses: flutter-actions/setup-flutter@v2
       with:
-        flutter-version: '3.24.5'
         channel: 'stable'
-    
-    - name: Accept Android licenses
-      run: |
-        yes | sdkmanager --licenses || true
-        flutter doctor --android-licenses
+        version: '3.24.5'
+        cache: true
     
     - name: Install dependencies
       run: flutter pub get
     
+    - name: Verify Flutter installation
+      run: flutter doctor
+    
     - name: Build APK
-      run: flutter build apk --release --split-debug-info=build/app/outputs/symbols
+      run: flutter build apk --release
     
     - name: Upload APK
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: alist-enhanced-apk
-        path: build/app/outputs/flutter-apk/app-release.apk
+        path: build/app/outputs/flutter-apk/*.apk
         retention-days: 30
+        if-no-files-found: warn
     
-    - name: Build info
+    - name: Build summary
+      if: success()
       run: |
-        echo "Build completed successfully!"
-        echo "APK file: app-release.apk"
-        echo "Build time: $(date)"
+        echo "✅ Build completed successfully!"
+        echo "APK files:"
+        ls -la build/app/outputs/flutter-apk/
