@@ -26,9 +26,6 @@ jobs:
         version: '3.24.5'
         cache: true
     
-    - name: Flutter doctor
-      run: flutter doctor -v
-    
     - name: Install dependencies
       run: flutter pub get
     
