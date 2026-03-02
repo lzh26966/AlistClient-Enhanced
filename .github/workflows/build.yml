@@ -26,26 +26,45 @@ jobs:
         version: '3.24.5'
         cache: true
     
+    - name: Flutter doctor
+      run: flutter doctor -v
+    
     - name: Install dependencies
       run: flutter pub get
     
-    - name: Verify Flutter installation
-      run: flutter doctor
+    - name: Check project structure
+      run: |
+        echo "=== 项目结构 ==="
+        ls -la
+        echo "\\n=== 依赖列表 ==="
+        cat pubspec.yaml | grep -A20 "dependencies:"
     
-    - name: Build APK
-      run: flutter build apk --release
+    - name: Build debug APK (测试)
+      run: flutter build apk --debug
     
-    - name: Upload APK
+    - name: Upload debug APK
+      if: success()
       uses: actions/upload-artifact@v4
       with:
-        name: alist-enhanced-apk
+        name: alist-enhanced-debug-apk
         path: build/app/outputs/flutter-apk/*.apk
         retention-days: 30
-        if-no-files-found: warn
+    
+    - name: Build release APK
+      if: success()
+      run: flutter build apk --release
+    
+    - name: Upload release APK
+      if: success()
+      uses: actions/upload-artifact@v4
+      with:
+        name: alist-enhanced-release-apk
+        path: build/app/outputs/flutter-apk/*.apk
+        retention-days: 30
     
     - name: Build summary
-      if: success()
+      if: always()
       run: |
-        echo "✅ Build completed successfully!"
-        echo "APK files:"
-        ls -la build/app/outputs/flutter-apk/
+        echo "=== 构建总结 ==="
+        echo "状态: ${{ job.status }}"
+        echo "时间: $(date)"
