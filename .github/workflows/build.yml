@@ -19,11 +19,19 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
     
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+      
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
         flutter-version: '3.24.5'
         channel: 'stable'
+    
+    - name: Accept Android licenses
+      run: |
+        yes | sdkmanager --licenses || true
+        flutter doctor --android-licenses
     
     - name: Install dependencies
       run: flutter pub get
